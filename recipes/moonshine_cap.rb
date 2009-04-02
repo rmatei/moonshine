@@ -85,6 +85,14 @@ namespace :moonshine do
 
 end
 
+# namespace :deploy do
+#   task :default do
+#     fetch(:app_hosts, "localhost").each do |host|
+#       puts host
+#     end
+#   end
+# end
+
 namespace :app do
 
   namespace :symlinks do
