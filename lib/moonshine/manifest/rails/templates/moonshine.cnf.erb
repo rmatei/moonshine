@@ -4,6 +4,12 @@
 default-character-set   = <%= configuration[:mysql][:default_character_set] || 'utf8' %>
 
 [mysqld]
+<% if cluster_mode? %>
+  ######### remote connections
+  bind-address = <%= configuration[:servers][:db] %>
+  <%= "port = #{configuration[:mysql][:port]}" if configuration[:mysql][:port] %>
+<% end %>
+
 ######### character sets
 character_set_server    = <%= configuration[:mysql][:character_set_server] || 'utf8' %>
 collation_server        = <%= configuration[:mysql][:collation_server] || 'utf8_general_ci' %>

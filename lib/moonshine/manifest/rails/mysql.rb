@@ -78,8 +78,8 @@ private
   
   # Returns localhost + whatever hosts are specified in configuration.
   def allowed_hosts
-    if configuration[:mysql][:allowed_hosts]
-      configuration[:mysql][:allowed_hosts] | ["localhost"] # always allow localhost
+    if cluster_mode?
+      configuration[:servers][:app] | ["localhost"] # always allow localhost
     else
       ["localhost"]
     end

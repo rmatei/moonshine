@@ -85,11 +85,11 @@ namespace :moonshine do
 
 end
 
+# just for messing around right now
 # namespace :deploy do
 #   task :default do
-#     fetch(:app_hosts, "localhost").each do |host|
-#       puts host
-#     end
+#     #puts roles.to_yaml
+#     #puts find_servers.inspect
 #   end
 # end
 
