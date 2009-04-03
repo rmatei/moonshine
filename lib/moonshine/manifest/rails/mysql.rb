@@ -33,6 +33,8 @@ module Moonshine::Manifest::Rails::Mysql
   # permisson to access the database with the supplied password
   def mysql_user
     allowed_hosts.each do |host|
+      puts "granting access privileges to #{host}"
+      
       grant =<<EOF
 GRANT ALL PRIVILEGES 
 ON #{database_environment[:database]}.*
@@ -40,7 +42,6 @@ TO #{database_environment[:username]}@#{host}
 IDENTIFIED BY '#{database_environment[:password]}';
 FLUSH PRIVILEGES;
 EOF
-      
       exec "mysql_user",
         :command => mysql_query(grant),
         :unless => mysql_query("show grants for #{database_environment[:username]}@#{host};"),
@@ -73,6 +74,7 @@ private
 
   # Internal helper to shell out and run a query. Doesn't select a database.
   def mysql_query(sql)
+    puts "executing SQL: #{sql}"
     "/usr/bin/mysql -u root -p -e \"#{sql}\""
   end
   
