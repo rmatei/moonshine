@@ -51,9 +51,9 @@ class Moonshine::Manifest < ShadowPuppet::Manifest
    configuration[:database][(ENV['RAILS_ENV'] || 'production').to_sym]
   end
    
-  # Returns true if we're deploying to more than one server
-  def cluster_mode?
-    !configuration[:servers].nil?
+  # Returns true if the DB is on a different server than the app
+  def remote_database?
+    !database_environment[:host].nil?
   end
   
   # The current deployment target. Best when used with capistrano-ext's multistage settings.

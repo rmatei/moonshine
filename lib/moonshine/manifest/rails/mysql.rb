@@ -33,7 +33,7 @@ module Moonshine::Manifest::Rails::Mysql
   # permisson to access the database with the supplied password
   def mysql_user
     allowed_hosts.each do |host|
-      puts "granting access privileges to #{host}"
+      puts "Granting DB access privileges to #{host}..."
       
       grant =<<EOF
 GRANT ALL PRIVILEGES 
@@ -80,7 +80,7 @@ private
   
   # Returns localhost + whatever hosts are specified in configuration.
   def allowed_hosts
-    if cluster_mode?
+    if remote_database?
       configuration[:servers][:app] | ["localhost"] # always allow localhost
     else
       ["localhost"]
