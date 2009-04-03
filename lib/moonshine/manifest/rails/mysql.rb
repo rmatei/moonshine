@@ -32,9 +32,8 @@ module Moonshine::Manifest::Rails::Mysql
   # GRANT the database user specified in the current <tt>database_environment</tt>
   # permisson to access the database with the supplied password
   def mysql_user
-    allowed_hosts.each do |host|
-      puts "Granting DB access privileges to #{host}..."
-      
+    # allowed_hosts.each do |host|
+      host = "97.107.131.189"
       grant =<<EOF
 GRANT ALL PRIVILEGES 
 ON #{database_environment[:database]}.*
@@ -48,7 +47,7 @@ EOF
         :require => exec('mysql_database'),
         :before => exec('rake tasks'),
         :notify => exec('rails_bootstrap')
-    end
+    # end
   end
 
   # Create the database from the current <tt>database_environment</tt>
