@@ -32,22 +32,14 @@ module Moonshine::Manifest::Rails::Mysql
   # GRANT the database user specified in the current <tt>database_environment</tt>
   # permisson to access the database with the supplied password
   def mysql_user
-    # allowed_hosts.each do |host|
-      host = "97.107.131.189"
-      grant =<<EOF
-GRANT ALL PRIVILEGES 
-ON #{database_environment[:database]}.*
-TO #{database_environment[:username]}@#{host}
-IDENTIFIED BY '#{database_environment[:password]}';
-FLUSH PRIVILEGES;
-EOF
-      exec "mysql_user",
-        :command => mysql_query(grant),
-        :unless => mysql_query("show grants for #{database_environment[:username]}@#{host};"),
-        :require => exec('mysql_database'),
-        :before => exec('rake tasks'),
-        :notify => exec('rails_bootstrap')
-    # end
+    grant_queries = allowed_hosts.map { |host| grant_query(host) }
+
+    exec "mysql_user",
+      :command => mysql_query(grant_queries.join),
+      :unless => mysql_query("show grants for #{database_environment[:username]}@#{allowed_hosts.last};"),
+      :require => exec('mysql_database'),
+      :before => exec('rake tasks'),
+      :notify => exec('rails_bootstrap')
   end
 
   # Create the database from the current <tt>database_environment</tt>
@@ -73,10 +65,10 @@ private
 
   # Internal helper to shell out and run a query. Doesn't select a database.
   def mysql_query(sql)
-    puts "executing SQL: #{sql}"
     "/usr/bin/mysql -u root -p -e \"#{sql}\""
   end
   
+  # The hosts that will be granted DB access.
   # Returns localhost + whatever hosts are specified in configuration.
   def allowed_hosts
     if remote_database?
@@ -84,6 +76,15 @@ private
     else
       ["localhost"]
     end
+  end
+  
+  # The SQL query that grants DB access to a certain IP.
+  def grant_query(host = "localhost")
+    "GRANT ALL PRIVILEGES 
+    ON #{database_environment[:database]}.*
+    TO #{database_environment[:username]}@#{host}
+    IDENTIFIED BY '#{database_environment[:password]}';
+    FLUSH PRIVILEGES;"
   end
 
 end
