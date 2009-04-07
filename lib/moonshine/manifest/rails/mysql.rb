@@ -1,4 +1,14 @@
 module Moonshine::Manifest::Rails::Mysql
+  
+  # Ensures the config is present before starting MySQL so that we can set 
+  # log sizes before startup
+  def mysql_config
+    #ensure the mysql key is present on the configuration hash
+    configure(:mysql => {})
+    file '/etc/mysql/conf.d/moonshine.cnf',
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'moonshine.cnf.erb'))
+  end
 
   # Installs <tt>mysql-server</tt> from apt and enables the <tt>mysql</tt>
   # service. Also creates a configuration file at

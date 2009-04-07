@@ -39,7 +39,7 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   end
   
   def db_stack
-    self.class.recipe :mysql_server, :mysql_gem, :mysql_database, :mysql_user, :mysql_fixup_debian_start
+    self.class.recipe :mysql_config, :mysql_server, :mysql_gem, :mysql_database, :mysql_user, :mysql_fixup_debian_start
   end
   
   # Basics that are used on all server roles
