@@ -41,12 +41,12 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   end
   
   def db_stack
-    self.class.recipe :mysql_config, :mysql_server, :mysql_gem, :mysql_database, :mysql_user, :mysql_fixup_debian_start, :rails_migrations
+    self.class.recipe :mysql_config, :mysql_server, :mysql_gem, :mysql_database, :mysql_user, :mysql_fixup_debian_start, :db_bootstrap, :rails_migrations
   end
   
   # Basics that are used on all server roles
   def shared_stack
-    self.class.recipe :rails_rake_environment, :rails_gems, :rails_directories, :rails_bootstrap
+    self.class.recipe :rails_rake_environment, :rails_gems, :rails_directories
     self.class.recipe :ntp, :time_zone, :postfix, :cron_packages, :motd
   end
   

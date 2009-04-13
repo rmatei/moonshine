@@ -62,7 +62,7 @@ module Moonshine::Manifest::Rails::Postgresql
       :user     => 'postgres',
       :require  => exec('postgresql_user'),
       :before   => exec('rake tasks'),
-      :notify   => exec('rails_bootstrap')
+      :notify   => exec('db_bootstrap')
   end
 
 private

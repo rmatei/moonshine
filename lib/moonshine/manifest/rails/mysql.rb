@@ -39,7 +39,7 @@ module Moonshine::Manifest::Rails::Mysql
       :unless => mysql_query("show grants for #{database_environment[:username]}@#{allowed_hosts.last};"),
       :require => exec('mysql_database'),
       :before => exec('rake tasks'),
-      :notify => exec('rails_bootstrap')
+      :notify => exec('db_bootstrap')
   end
 
   # Create the database from the current <tt>database_environment</tt>
