@@ -21,8 +21,14 @@ class Moonshine::Manifest::RailsTest < Test::Unit::TestCase
     @manifest = Moonshine::Manifest::Rails.new
   end
 
+
   def test_is_executable
     assert @manifest.executable?
+  end
+
+  def test_sets_up_gem_sources
+    @manifest.rails_gems
+    assert_match /gems.github.com/, @manifest.puppet_resources[Puppet::Type::File]["/etc/gemrc"].params[:content].value
   end
 
   def test_loads_gems_from_config_hash
@@ -31,13 +37,13 @@ class Moonshine::Manifest::RailsTest < Test::Unit::TestCase
     assert_not_nil Moonshine::Manifest::Rails.configuration[:gems]
     Moonshine::Manifest::Rails.configuration[:gems].each do |gem|
       assert_not_nil gem_resource = @manifest.puppet_resources[Puppet::Type::Package][gem[:name]]
-      assert_equal gem[:source], gem_resource.params[:source].value
       assert_equal :gem, gem_resource.params[:provider].value
     end
+    assert_nil @manifest.puppet_resources[Puppet::Type::Package]['jnewland-pulse'].params[:source]
   end
 
   def test_magically_loads_gem_dependencies
-    @manifest.configure(:gems => [ 
+    @manifest.configure(:gems => [
       { :name => 'webrat' },
       { :name => 'thoughtbot-paperclip', :source => 'http://gems.github.com/' }
     ])
@@ -132,6 +138,63 @@ class Moonshine::Manifest::RailsTest < Test::Unit::TestCase
     assert_match /SSLEngine on/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
     assert_match /https/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
   end
+  
+  def test_htpasswd_generation
+    @manifest.passenger_configure_gem_path
+    @manifest.configure(:apache => {
+      :users => {
+        :jimbo  => 'motorcycle',
+        :joebob => 'jimbo'
+      }
+    })
+    @manifest.apache_server
+    
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Exec].find { |n, r| r.params[:command].value == 'htpasswd -b /srv/foo/current/config/htpasswd jimbo motorcycle' }
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Exec].find { |n, r| r.params[:command].value == 'htpasswd -b /srv/foo/current/config/htpasswd joebob jimbo' }
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::File]["#{@manifest.configuration[:deploy_to]}/current/config/htpasswd"]
+  end
+
+  def test_vhost_basic_auth_configuration
+    @manifest.passenger_configure_gem_path
+    @manifest.configure(:apache => {
+      :users => {
+        :jimbo  => 'motorcycle',
+        :joebob => 'jimbo'
+      }
+    })
+    @manifest.passenger_site
+
+    assert_match /<Location \/ >/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
+    assert_match /authuserfile #{@manifest.configuration[:deploy_to]}\/current\/config\/htpasswd/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
+    assert_match /require valid-user/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
+  end
+ 
+  def test_vhost_allow_configuration
+    @manifest.passenger_configure_gem_path
+    @manifest.configure(:apache => {
+      :users => {},
+      :deny  => {},
+      :allow => ['192.168.1','env=safari_user']
+    })
+    @manifest.passenger_site
+    vhost = @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
+    assert_match /<Location \/ >/, vhost
+    assert_match /allow from 192.168.1/, vhost
+    assert_match /allow from env=safari_user/, vhost
+  end
+
+  def test_vhost_deny_configuration
+    @manifest.passenger_configure_gem_path
+    @manifest.configure(:apache => {
+      :users => {},
+      :allow => {},
+      :deny => ['192.168.1','env=safari_user']
+    })
+    @manifest.passenger_site
+    
+    assert_match /<Location \/ >/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
+    assert_match /deny from 192.168.1/, @manifest.puppet_resources[Puppet::Type::File]["/etc/apache2/sites-available/#{@manifest.configuration[:application]}"].params[:content].value
+  end
 
   def test_installs_postfix
     @manifest.postfix
@@ -182,6 +245,36 @@ class Moonshine::Manifest::RailsTest < Test::Unit::TestCase
     assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["logrotate"]
     assert_match /compress/, @manifest.puppet_resources[Puppet::Type::File]["/etc/logrotate.d/srvtheappsharedlogslog.conf"].params[:content].value
     assert_match /nocompress/, @manifest.puppet_resources[Puppet::Type::File]["/etc/logrotate.d/srvotherappsharedlogslog.conf"].params[:content].value
+  end
+
+  def test_postgresql_server
+    @manifest.postgresql_server
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Service]["postgresql-8.3"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["postgresql-client"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["postgresql-contrib"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::File]["/etc/postgresql/8.3/main/pg_hba.conf"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::File]["/etc/postgresql/8.3/main/postgresql.conf"]
+  end
+
+  def test_postgresql_gem
+    @manifest.postgresql_gem
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["postgres"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["pg"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["postgresql-client"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["postgresql-contrib"]
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Package]["libpq-dev"]
+  end
+
+  def test_postgresql_database_and_user
+    @manifest.expects(:database_environment).at_least_once.returns({
+      :username => 'pg_username',
+      :database => 'pg_database',
+      :password => 'pg_password'
+    })
+    @manifest.postgresql_user
+    @manifest.postgresql_database
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Exec].find { |n, r| r.params[:command].value == '/usr/bin/psql -c "CREATE USER pg_username WITH PASSWORD \'pg_password\'"' }
+    assert_not_nil @manifest.puppet_resources[Puppet::Type::Exec].find { |n, r| r.params[:command].value == '/usr/bin/createdb -O pg_username pg_database' }
   end
 
 end
