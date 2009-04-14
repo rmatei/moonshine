@@ -19,7 +19,6 @@ thoughtbot-paperclip:
 - libmagick9-dev
 mini_magick:
 - imagemagick
-- libmagick9-dev
 postgres:
 - postgresql-client
 - postgresql-contrib
