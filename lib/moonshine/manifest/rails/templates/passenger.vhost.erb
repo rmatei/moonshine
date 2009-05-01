@@ -1,6 +1,6 @@
 <VirtualHost *:80>
 <% if configuration[:ssl] %>
-  ServerName <%= configuration[:domain] || 'ubuntu' || `hostname -f` %>
+  ServerName <%= configuration[:domain] || `hostname -f` %>
   RewriteEngine On
   RewriteCond %{HTTPS} !=on
   RewriteCond %{REQUEST_URI} !^/server-status
@@ -22,7 +22,7 @@
   BrowserMatch ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
 
 <% end %>
-  ServerName <%= configuration[:domain] || `hostname -f` %>
+  ServerName <%= 'ubuntu' || configuration[:domain] || `hostname -f` %>
   <% if configuration[:domain_aliases] %>
   ServerAlias <%= configuration[:domain_aliases].to_a.join(' ') %>
   <% end %>
