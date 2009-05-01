@@ -1,6 +1,6 @@
 <VirtualHost *:80>
 <% if configuration[:ssl] %>
-  ServerName <%= configuration[:domain] || 'ubuntu' || `hostname -f` # LOCAL - override hostname %>
+  ServerName <%= configuration[:domain] || 'ubuntu' || `hostname -f` %>
   RewriteEngine On
   RewriteCond %{HTTPS} !=on
   RewriteCond %{REQUEST_URI} !^/server-status
