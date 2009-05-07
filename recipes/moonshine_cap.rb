@@ -209,6 +209,9 @@ end
 
 # Our additions...
 
+after "deploy:restart", "tag_last_deploy"
+after "deploy:restart", "newrelic:notice_deployment"
+
 namespace :status do
   desc "Tail production log file" 
   task :log, :roles => :app do
@@ -230,4 +233,13 @@ namespace :status do
   task :passenger, :roles => :app do
     sudo "passenger-status"
   end
+end
+
+task :tag_last_deploy do
+  desc "Tags deployment in git"
+  set :timestamp, Time.now
+  set :tag_name, "deployed_to_production_#{timestamp.strftime("%Y%m%d-%H%M")}"
+  `git tag -a -m "Tagging deploy to production at #{timestamp.strftime("%Y%m%d-%H%M")}" #{tag_name} #{branch}`
+  `git push --tags`
+  puts "Tagged release with #{tag_name}."
 end
