@@ -243,3 +243,8 @@ task :tag_last_deploy do
   `git push --tags`
   puts "Tagged release with #{tag_name}."
 end
+
+task :reboot do
+  desc "Reboot app servers"
+  sudo "reboot"
+end
