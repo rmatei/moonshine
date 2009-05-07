@@ -204,3 +204,30 @@ namespace :deploy do
     moonshine.bootstrap
   end
 end
+
+
+
+# Our additions...
+
+namespace :status do
+  desc "Tail production log file" 
+  task :log, :roles => :app do
+    run "tail -f #{shared_path}/log/production.log" do |channel, stream, data|
+      puts "#{data}" 
+      break if stream == :err    
+    end
+  end
+  
+  desc "Look at memory stats" 
+  task :vmstat, :roles => :app do
+    run "vmstat 10" do |channel, stream, data|
+      puts "#{channel[:host]}: #{data}" 
+      break if stream == :err    
+    end
+  end
+  
+  desc "Get passengers"
+  task :passenger, :roles => :app do
+    sudo "passenger-status"
+  end
+end
