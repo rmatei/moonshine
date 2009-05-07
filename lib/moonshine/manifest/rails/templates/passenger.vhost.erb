@@ -144,7 +144,6 @@
 
   BrowserMatch ".*MSIE.*" nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
 
-<% end %>
   ServerName <%= configuration[:domain] || `hostname -f` %>
   <% if configuration[:domain_aliases] %>
   ServerAlias <%= configuration[:domain_aliases].to_a.join(' ') %>
