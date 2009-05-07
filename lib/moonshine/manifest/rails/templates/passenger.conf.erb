@@ -104,3 +104,5 @@ PassengerMaxInstancesPerApp <%= configuration[:passenger][:max_instances_per_app
 # that a visitor spends on a single web page. But your mileage may vary.
 
 PassengerPoolIdleTime <%= configuration[:passenger][:pool_idle_time] || 300 %>
+
+PassengerMaxRequests <%= configuration[:passenger][:max_requests] || 0 %>
