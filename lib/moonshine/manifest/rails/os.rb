@@ -19,7 +19,7 @@ module Moonshine::Manifest::Rails::Os
     
     cron :rotate_railslog, 
       :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{safename}.conf",
-      :user => root,
+      :user => 'root',
       :minute => 15
   end
 
