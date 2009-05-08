@@ -17,11 +17,15 @@ module Moonshine::Manifest::Rails::Os
     
     safename = "#{configuration[:deploy_to]}/shared/log/*.log".gsub(/[^a-zA-Z]/, '')
     
-    cron :rotate_railslog, 
+    begin
+      cron :rotate_railslog, 
       :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{safename}.conf",
       :user => 'root',
       :minute => 15,
-      :require => package("cron") rescue nil
+      :require => package("cron")
+    rescue
+      puts "cron failed"
+    end
   end
 
   # Create a MOTD to remind those logging in via SSH that things are managed
