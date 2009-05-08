@@ -230,9 +230,14 @@ namespace :status do
     end
   end
   
-  desc "Get passengers"
+  desc "Look at number of Passenger instances"
   task :passenger, :roles => :app do
     sudo "passenger-status"
+  end
+  
+  desc "Look at Passenger memory use"
+  task :mem, :roles => :app do
+    sudo "passenger-memory-stats"
   end
 end
 
