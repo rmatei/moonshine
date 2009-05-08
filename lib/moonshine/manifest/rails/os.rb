@@ -21,7 +21,7 @@ module Moonshine::Manifest::Rails::Os
       :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{safename}.conf",
       :user => 'root',
       :minute => 15,
-      :require => package("cron")
+      :require => package("cron") rescue nil
   end
 
   # Create a MOTD to remind those logging in via SSH that things are managed
