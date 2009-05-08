@@ -40,6 +40,12 @@ STATUS
       :content => status,
       :notify => service("apache2")
     file '/etc/logrotate.d/varlogapachelog.conf', :ensure => :absent
+    
+    file '/etc/apache2/apache2.conf',
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'apache2.conf.erb')),
+      :notify => service("apache2"),
+      :alias => "apache2_conf"
   end
 
 private

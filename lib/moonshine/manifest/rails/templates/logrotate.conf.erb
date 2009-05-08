@@ -2,6 +2,8 @@
   <% options[:options].each do |o| %>
   <%= o %>
   <% end %>
+  size 1
+  rotate 24
   <% unless options[:postrotate].nil? %>
   postrotate
     <%= options[:postrotate] %>
