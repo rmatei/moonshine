@@ -14,6 +14,11 @@ module Moonshine::Manifest::Rails::Os
   def cron_packages
     service "cron", :require => package("cron"), :ensure => :running
     package "cron", :ensure => :installed
+    
+    cron :rotate_railslog, 
+      :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{configuration[:deploy_to].gsub('/','')}sharedlog.conf",
+      :user => configuration[:user],
+      :minute => 15
   end
 
   # Create a MOTD to remind those logging in via SSH that things are managed
