@@ -16,7 +16,7 @@ module Moonshine::Manifest::Rails::Os
     package "cron", :ensure => :installed
     
     cron :rotate_railslog, 
-      :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{configuration[:deploy_to].gsub('/','')}sharedlog.conf",
+      :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{configuration[:deploy_to].gsub('/','')}sharedloglog.conf",
       :user => configuration[:user],
       :minute => 15
   end
