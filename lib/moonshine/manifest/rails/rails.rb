@@ -53,7 +53,7 @@ module Moonshine::Manifest::Rails::Rails
     })
     file "/etc/logrotate.d/#{configuration[:deploy_to].gsub('/','')}sharedlog.conf", :ensure => :absent
     
-    cron :rotate_railslog,
+    cron :rotate_railslog
       :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{configuration[:deploy_to].gsub('/','')}sharedlog.conf"
       :user => dank,
       :minute => 15
