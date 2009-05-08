@@ -45,11 +45,11 @@ namespace :moonshine do
     sudo 'rm /tmp/moonshine_setup_manifest.rb'
     sudo 'rm /tmp/moonshine.yml'
     
-    # add OurDelta sources - alternative MySQL builds
-    put(File.read(File.join(File.dirname(__FILE__), "bootstrap.ourdelta_mysql.sh")),"/tmp/bootstrap_ourdelta.sh")
-    sudo 'chmod a+x /tmp/bootstrap_ourdelta.sh'
-    sudo '/tmp/bootstrap_ourdelta.sh'
-    sudo 'rm /tmp/bootstrap_ourdelta.sh'
+    # # add OurDelta sources - alternative MySQL builds
+    # put(File.read(File.join(File.dirname(__FILE__), "bootstrap.ourdelta_mysql.sh")),"/tmp/bootstrap_ourdelta.sh")
+    # sudo 'chmod a+x /tmp/bootstrap_ourdelta.sh'
+    # sudo '/tmp/bootstrap_ourdelta.sh'
+    # sudo 'rm /tmp/bootstrap_ourdelta.sh'
   end
 
   desc 'Apply the Moonshine manifest for this application'
