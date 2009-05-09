@@ -16,6 +16,8 @@ module Moonshine::Manifest::Rails::Os
     package "cron", :ensure => :installed
     
     if configuration[:cron_switch] and configuration[:cron_switch] == true
+      package "logrotate", :ensure => :installed, :require => package("cron"), :notify => service("cron")
+      
       safename = "#{configuration[:deploy_to]}/shared/log/*.log".gsub(/[^a-zA-Z]/, '')
     
       cron :rotate_railslog, 

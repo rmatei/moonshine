@@ -40,6 +40,7 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   def app_stack
     self.class.recipe :apache_server
     self.class.recipe :passenger_gem, :passenger_configure_gem_path, :passenger_apache_module, :passenger_site
+    self.class.recipe :rails_logrotate
   end
   
   def db_stack
