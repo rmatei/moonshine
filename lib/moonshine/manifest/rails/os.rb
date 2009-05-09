@@ -15,13 +15,15 @@ module Moonshine::Manifest::Rails::Os
     service "cron", :require => package("cron"), :ensure => :running
     package "cron", :ensure => :installed
     
-    # safename = "#{configuration[:deploy_to]}/shared/log/*.log".gsub(/[^a-zA-Z]/, '')
-    # 
-    # cron :rotate_railslog, 
-    #   :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{safename}.conf",
-    #   :user => 'root',
-    #   :minute => 15,
-    #   :require => package("cron")
+    if configuration[:cron_switch] and configuraiton[:cron_switch] == true
+      safename = "#{configuration[:deploy_to]}/shared/log/*.log".gsub(/[^a-zA-Z]/, '')
+    
+      cron :rotate_railslog, 
+        :command => "/usr/sbin/logrotate -f /etc/logrotate.d/#{safename}.conf",
+        :user => 'root',
+        :minute => 15,
+        :require => package("cron")
+    end
   end
 
   # Create a MOTD to remind those logging in via SSH that things are managed
