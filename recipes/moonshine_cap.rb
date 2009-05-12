@@ -180,12 +180,23 @@ end
 namespace :deploy do
   desc "Restart the Passenger processes on the app server by touching tmp/restart.txt."
   task :restart, :roles => :app, :except => { :no_release => true } do
+    run "rm -f #{current_path}/tmp/stop.txt"
     run "sudo touch #{current_path}/tmp/restart.txt"
   end
 
-  [:start, :stop].each do |t|
-    desc "#{t} task is a no-op with Passenger"
-    task t, :roles => :app do ; end
+  # [:start, :stop].each do |t|
+  #   desc "#{t} task is a no-op with Passenger"
+  #   task t, :roles => :app do ; end
+  # end
+  
+  desc "Stop passenger and display public/503.html"
+  task :stop, :roles => :app do
+    run "sudo touch #{current_path}/tmp/stop.txt"
+  end
+  
+  desc "Start passenger if it was stopped"
+  task :stop, :roles => :app do
+    run "rm -f #{current_path}/tmp/stop.txt"
   end
 
   desc <<-DESC
