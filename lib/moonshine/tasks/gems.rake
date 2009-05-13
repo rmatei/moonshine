@@ -7,6 +7,10 @@ namespace :moonshine do
       hash.merge!(:version => gem.requirement.to_s) if gem.requirement
       hash
     end
+    
+    # add our own gem requirements for every project...
+    gem_array += (["aws-s3", "ruby-debug", "curb", "json", "mysql"].map { |gem| { :name => gem } })
+    
     if (RAILS_GEM_VERSION rescue false)
       gem_array << {:name => 'rails', :version => RAILS_GEM_VERSION }
     else
