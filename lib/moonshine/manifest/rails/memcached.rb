@@ -5,7 +5,7 @@ module Moonshine::Manifest::Rails::Memcached
     service 'memcached', :ensure => :running, :enable => true, :require => package('memcached')
     
     #need telnet to check memcache stats
-    package 'telnet', :ensure => installed
+    package 'telnet', :ensure => :installed
     
     file '/etc/memcached.conf',
       :ensure => :present,
