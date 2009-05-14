@@ -195,7 +195,7 @@ namespace :deploy do
   end
   
   desc "Start passenger if it was stopped"
-  task :stop, :roles => :app do
+  task :start, :roles => :app do
     run "rm -f #{current_path}/tmp/stop.txt"
   end
 
