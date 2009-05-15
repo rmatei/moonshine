@@ -214,15 +214,28 @@ namespace :deploy do
   task :setup, :except => { :no_release => true } do
     moonshine.bootstrap
   end
+  
+  # Migrations
+  desc "Deploy code, run migrations, then restart app servers"
+  task :migrations, :roles => :primary_app do
+    update
+    migrate
+    restart
+  end
+  
+  desc "Run DB migrations"
+  task :migrate, :roles => :primary_app do
+    run "cd #{current_path}"
+    run "rake db:migrate RAILS_ENV=production"
+  end
 end
-
 
 
 # Our additions...
 
 after "deploy:update_code", "tag_last_deploy"
 after "deploy:update_code", "newrelic:notice_deployment"
-after "deploy", "deploy:restart"
+#after "deploy", "deploy:restart"
 
 namespace :status do
   desc "Tail production log file" 
@@ -265,3 +278,4 @@ task :reboot do
   desc "Reboot app servers"
   sudo "reboot"
 end
+
