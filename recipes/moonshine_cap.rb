@@ -217,16 +217,15 @@ namespace :deploy do
   
   # Migrations
   desc "Deploy code, run migrations, then restart app servers"
-  task :migrations, :roles => :primary_app do
-    update
+  task :migrations do
+    deploy
     migrate
     restart
   end
   
   desc "Run DB migrations"
   task :migrate, :roles => :primary_app do
-    run "cd #{current_path}"
-    run "rake db:migrate RAILS_ENV=production"
+    run "cd #{current_path} && rake db:migrate RAILS_ENV=production"
   end
 end
 
