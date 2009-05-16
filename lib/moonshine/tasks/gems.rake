@@ -9,7 +9,7 @@ namespace :moonshine do
     end
     
     # add our own gem requirements for every project...
-    gem_array += (["aws-s3", "ruby-debug", "curb", "json", "mysql", "right-aws"].map { |gem| { :name => gem } })
+    gem_array += (["aws-s3", "ruby-debug", "curb", "json", "mysql", "right-aws", "composite_primary_keys"].map { |gem| { :name => gem } })
     
     if (RAILS_GEM_VERSION rescue false)
       gem_array << {:name => 'rails', :version => RAILS_GEM_VERSION }
