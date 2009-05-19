@@ -218,7 +218,7 @@ namespace :deploy do
   # Migrations
   desc "Deploy code, run migrations, then restart app servers"
   task :migrations do
-    deploy
+    default
     migrate
     restart
   end
