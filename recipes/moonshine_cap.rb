@@ -278,3 +278,13 @@ task :reboot do
   sudo "reboot"
 end
 
+namespace :db do
+  desc "Creates a gzipped copy of the production database."
+  task :backup, :roles => :primary_app do
+    rake "db:backup DIR=#{shared_path} -f #{current_path}/config/shared/tasks/backup.rake"
+  end
+end
+
+def rake command
+  run "cd #{current_path}; rake #{command} RAILS_ENV=production"
+end
