@@ -21,6 +21,7 @@ logfile /var/log/memcached.log
 # Note that the daemon will grow to this size, but does not start out holding this much
 # memory
 -m 128
+-m <%= configuration[:memcached][:mem_size] || 128 %>
 
 # Default connection port is 11211
 -p 11211 
