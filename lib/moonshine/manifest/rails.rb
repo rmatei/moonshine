@@ -33,6 +33,8 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   include Moonshine::Manifest::Rails::Os
   require File.join(File.dirname(__FILE__), 'rails', 'memcached.rb')
   include Moonshine::Manifest::Rails::Memcached
+  require File.join(File.dirname(__FILE__), 'rails', 'god.rb')
+  include Moonshine::Manifest::Rails::God
   
   # A super recipe that uses the recipes for installing Apache, Passenger, 
   # MySQL, Rails, NTP, Cron, Postfix. To customize your stack, call the 
