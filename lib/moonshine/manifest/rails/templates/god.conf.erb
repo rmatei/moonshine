@@ -1,13 +1,13 @@
 rails_root = "<%= configuration[:deploy_to] + "/current" %>"
 workers = <%= configuration[:delayed_job_workers] || 5 %>
-name_key = <%= configuration[:application].to_s + rand(1000000).to_s %>
+name_key = "<%= configuration[:application].to_s + rand(1000000).to_s %>"
  
 workers.times do |num|
   God.watch do |w|
     w.name = "#{name_key}-#{num}"
     w.group = 'dj'
     w.interval = 30.seconds
-    w.start = "rake -f #{rails_root}/Rakefile production jobs:work"
+    w.start = "rake jobs:work RAILS_ENV=production -f #{rails_root}/Rakefile"
  
     w.uid = '<%= configuration[:user] %>'
     w.gid = '<%= configuration[:group] %>'
