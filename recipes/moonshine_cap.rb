@@ -244,7 +244,7 @@ end
 
 after "deploy:update_code", "tag_last_deploy"
 after "deploy:update_code", "newrelic:notice_deployment"
-after "deploy:restart", "dj:restart"
+# after "deploy:restart", "dj:restart"
 #after "deploy", "deploy:restart"
 
 namespace :status do
