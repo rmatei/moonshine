@@ -244,11 +244,7 @@ end
 
 after "deploy:update_code", "tag_last_deploy"
 after "deploy:update_code", "newrelic:notice_deployment"
-<<<<<<< HEAD:recipes/moonshine_cap.rb
 # after "deploy:restart", "dj:restart"
-=======
-#after "deploy:restart", "dj:restart"
->>>>>>> 77450f39540fc691336fd58811d64169115e7a51:recipes/moonshine_cap.rb
 #after "deploy", "deploy:restart"
 
 namespace :status do
