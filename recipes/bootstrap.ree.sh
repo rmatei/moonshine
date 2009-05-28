@@ -10,7 +10,7 @@ echo "Removing Ruby from apt"
 apt-get remove -q -y ^ruby*
 
 PREFIX="/usr"
-REE="ruby-enterprise-1.8.6-20090421"
+REE="ruby-enterprise-1.8.6-20090520"
 
 if [ `which ruby` ]; then
 
