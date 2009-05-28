@@ -8,7 +8,7 @@ workers.times do |num|
     w.group = 'dj'
     w.interval = 30.seconds
     w.start = "rake jobs:work -f #{rails_root}/Rakefile RAILS_ENV=production"
-    w.stop =  "kill -9 `cat /var/run/god/#{w.name}.pid"
+    w.stop =  "kill -9 `cat /var/run/god/#{w.name}.pid`"
  
     w.uid = '<%= configuration[:user] %>'
     w.gid = '<%= configuration[:group] %>'

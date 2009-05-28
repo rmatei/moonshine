@@ -10,8 +10,7 @@ RETVAL=0
 
 case "$1" in
     start)
-      /usr/bin/god -P /var/run/god.pid -l /var/log/god.log
-      /usr/bin/god load /etc/god.conf
+      /usr/bin/god -c /etc/god.conf -P /var/run/god.pid -l /var/log/god.log
       RETVAL=$?
   ;;
     stop)
@@ -20,8 +19,7 @@ case "$1" in
   ;;
     restart)
       kill `cat /var/run/god.pid`
-      /usr/bin/god -P /var/run/god.pid -l /var/log/god.log
-      /usr/bin/god load /etc/god.conf
+      /usr/bin/god -c /etc/god.conf -P /var/run/god.pid -l /var/log/god.log
       RETVAL=$?
   ;;
     status)

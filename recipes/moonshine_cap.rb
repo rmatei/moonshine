@@ -317,6 +317,11 @@ namespace :dj do
     sudo "god stop dj"
   end
   
+  desc "Start delayed job processes through god"
+  task :start, :roles  => :app do
+    sudo "god start dj"
+  end
+  
   desc "Restart delayed job processes through god"
   task :restart, :roles => :app do
     stop
