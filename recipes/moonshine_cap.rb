@@ -227,6 +227,7 @@ namespace :deploy do
   task :migrate, :roles => :primary_app do
     run "cd #{current_path} && rake db:migrate RAILS_ENV=production"
   end
+  
 end
 
 
@@ -234,6 +235,7 @@ end
 
 after "deploy:update_code", "tag_last_deploy"
 after "deploy:update_code", "newrelic:notice_deployment"
+after "deploy:restart", "dj:restart"
 #after "deploy", "deploy:restart"
 
 namespace :status do
@@ -282,6 +284,28 @@ namespace :db do
   desc "Creates a gzipped copy of the production database."
   task :backup, :roles => :primary_app do
     rake "db:backup DIR=#{shared_path} -f #{current_path}/config/shared/tasks/backup.rake"
+  end
+end
+
+namespace :dj do
+  desc "Start delayed job processes through god"
+  task :boot, :roles => :app do
+    sudo "god -c /etc/god.conf"
+  end
+  
+  desc "Stop delayed job processes through god"
+  task :stop, :roles => :app do
+    sudo "god stop dj"
+  end
+  
+  desc "Get delayed job processes status through god"
+  task :stop, :roles => :app do
+    sudo "god status dj"
+  end
+  
+  desc "Restart delayed job processes through god"
+  task :restart, :roles => :app do
+    sudo "god restart dj"
   end
 end
 
