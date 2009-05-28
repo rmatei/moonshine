@@ -22,7 +22,7 @@ else
 
   pushd /tmp
   echo "Downloading REE"
-  wget -q http://rubyforge.org/frs/download.php/55511/$REE.tar.gz
+  wget -q http://rubyforge.org/frs/download.php/57097/$REE.tar.gz
   echo "Untar REE"
   tar xzf $REE.tar.gz
   pushd $REE/

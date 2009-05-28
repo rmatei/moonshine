@@ -51,6 +51,15 @@ namespace :moonshine do
     # sudo '/tmp/bootstrap_ourdelta.sh'
     # sudo 'rm /tmp/bootstrap_ourdelta.sh'
   end
+  
+  desc "Update REE to new version"
+  task :update_ree do
+    put(File.read(File.join(File.dirname(__FILE__), "ree_upgrade.sh")),"/tmp/ree_upgrade.sh")
+    sudo 'chmod a+x /tmp/ree_upgrade.sh'
+    sudo '/tmp/ree_upgrade.sh'
+    sudo 'rm /tmp/ree_upgrade.sh'
+  end
+  
 
   desc 'Apply the Moonshine manifest for this application'
   task :apply do
@@ -264,6 +273,11 @@ namespace :status do
   task :mem, :roles => :app do
     sudo "passenger-memory-stats"
   end
+  
+  desc "Get delayed job processes status through god"
+  task :god, :roles => :app do
+    sudo "god status dj"
+  end
 end
 
 task :tag_last_deploy do
@@ -296,11 +310,6 @@ namespace :dj do
   desc "Stop delayed job processes through god"
   task :stop, :roles => :app do
     sudo "god stop dj"
-  end
-  
-  desc "Get delayed job processes status through god"
-  task :stop, :roles => :app do
-    sudo "god status dj"
   end
   
   desc "Restart delayed job processes through god"
