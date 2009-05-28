@@ -5,9 +5,9 @@ module Moonshine::Manifest::Rails::God
       :ensure => :present,
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.conf.erb'))
     
-    file '/etc/init.d/god.conf',
+    file '/etc/init.d/god',
       :ensure => :present,
-      :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.conf.erb'))
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.init.erb'))
   end
   
 
