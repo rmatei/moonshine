@@ -9,7 +9,9 @@ module Moonshine::Manifest::Rails::God
       :ensure => :present,
       :content => template(File.join(File.dirname(__FILE__), 'templates', 'god.init.erb')),
       :mode => '755',
-      :require => exec("start_on_boot")
+    
+    exec ("start_on_boot"),
+      :command => "/usr/sbin/update-rc.d -f god defaults"
       
   end
   
