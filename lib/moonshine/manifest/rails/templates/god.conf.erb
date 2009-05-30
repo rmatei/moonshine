@@ -1,6 +1,6 @@
 rails_root = "<%= configuration[:deploy_to] + "/current" %>"
 workers = <%= configuration[:delayed_job_workers] || 5 %>
-name_key = "<%= configuration[:application].to_s + rand(1000000).to_s %>"
+name_key = "<%= configuration[:application].to_s + `ifconfig eth0 | sed -n '/inet addr:/s/ *inet addr:\([[:digit:].]*\) .*/\1/p'` %>"
  
 workers.times do |num|
   God.watch do |w|
