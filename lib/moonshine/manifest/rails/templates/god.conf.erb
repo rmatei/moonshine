@@ -1,6 +1,12 @@
+def local_ip
+  ifconfig = %x(which /sbin/ifconfig).strip
+  %x(ifconfig).split("lo").shift =~ /inet addr\:(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\s/
+  $1
+end
+
 rails_root = "<%= configuration[:deploy_to] + "/current" %>"
 workers = <%= configuration[:delayed_job_workers] || 5 %>
-name_key = "<%= `ifconfig eth0 | sed -n '/inet addr:/s/ *inet addr:\([[:digit:].]*\) .*/\1/p'` %>"
+name_key = "<%= local_ip.to_s %>"
  
 workers.times do |num|
   God.watch do |w|
