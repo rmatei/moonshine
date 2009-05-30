@@ -301,17 +301,26 @@ namespace :db do
   end
 end
 
-namespace :dj do
-  desc "Start delayed job processes through god"
-  task :boot, :roles => :app do
+namespace :god do
+  desc "Start god"
+  task :init, :roles => :app do
     sudo "god -c /etc/god.conf"
+  end
+  
+  desc "Kill god"
+  task :kill, :roles => :app do
+    sudo "god terminate"
   end
   
   desc "Reload god config"
   task :reload, :roles => :app do
     sudo "god load /etc/god.conf"
   end
-  
+end
+
+before "dj:restart", "god:reload"
+
+namespace :dj do
   desc "Stop delayed job processes through god"
   task :stop, :roles => :app do
     sudo "god stop dj"
@@ -324,8 +333,6 @@ namespace :dj do
   
   desc "Restart delayed job processes through god"
   task :restart, :roles => :app do
-    stop
-    reload
     sudo "god restart dj"
   end
 end
