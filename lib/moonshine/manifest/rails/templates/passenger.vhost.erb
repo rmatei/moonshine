@@ -267,6 +267,7 @@
 
   # Check for maintenance file and redirect all requests
   RewriteCond %{REQUEST_URI} !\.(css|jpg|png|gif)$
+  RewriteCond %{REQUEST_URI} !(systems_go)$
   RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
   RewriteRule ^.*$ /system/maintenance.html [L]
 
