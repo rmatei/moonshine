@@ -335,6 +335,14 @@ namespace :dj do
   task :restart, :roles => :app do
     sudo "god restart dj"
   end
+  
+  task :killall, :roles => :app do
+    sudo "killall rake"
+  end
+  
+  task :rake, :roles => :app do
+    run "ps aux | grep rake"
+  end
 end
 
 def rake command
