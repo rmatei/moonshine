@@ -77,6 +77,10 @@ from installing any gems, packages, or dependencies directly on the server.
       :ensure => "/usr/share/zoneinfo/#{zone}",
       :notify => service('ntp')
   end
+  
+  def psmisc
+    package 'psmisc', :ensure => :latest
+  end
 
 private
 
