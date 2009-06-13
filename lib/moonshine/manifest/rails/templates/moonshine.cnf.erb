@@ -4,11 +4,6 @@
 default-character-set   = <%= configuration[:mysql][:default_character_set] || 'utf8' %>
 
 [mysqld]
-<% if remote_database? -%>
-######### remote connections
-bind-address = <%= database_environment[:host] %>
-port         = <%= database_environment[:port] %>
-<% end -%>
 
 ######### storage engine
 default-storage-engine  = <%= configuration[:mysql][:default_storage_engine] || 'innodb' %>
