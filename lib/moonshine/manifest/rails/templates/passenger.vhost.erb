@@ -118,6 +118,7 @@
   # Add support for  stopping passenger
   ErrorDocument 503 /503.html
   RewriteCond %{DOCUMENT_ROOT}/../tmp/stop.txt -f
+  RewriteCond %{REQUEST_URI} !(systems_go)$
   RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
   RewriteRule ^(.*)$ /$1 [R=503,L]
 
@@ -263,13 +264,6 @@
   # Prevent access to .git directories
   RewriteRule ^(.*/)?\.git/ - [F,L]
   ErrorDocument 403 "Access Forbidden"
-  
-
-  # Check for maintenance file and redirect all requests
-  RewriteCond %{REQUEST_URI} !\.(css|jpg|png|gif)$
-  RewriteCond %{REQUEST_URI} !(systems_go)$
-  RewriteCond %{DOCUMENT_ROOT}/system/maintenance.html -f
-  RewriteRule ^.*$ /system/maintenance.html [L]
 
   # Rewrite index to check for static
   RewriteRule ^/$ /index.html [QSA]
