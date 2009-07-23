@@ -81,6 +81,10 @@ from installing any gems, packages, or dependencies directly on the server.
   def psmisc
     package 'psmisc', :ensure => :latest
   end
+  
+  def libxml_dev
+    package 'libxml2-dev', :ensure => :latest
+  end
 
 private
 
