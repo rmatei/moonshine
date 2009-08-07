@@ -345,8 +345,8 @@ namespace :dj do
     sudo "killall rake"
   end
   
-  task :rake, :roles => :app do
-    run "ps aux | grep rake"
+  task :processes, :roles => :app do
+    run "ps aux | grep 'rake jobs:work'"
   end
 end
 
