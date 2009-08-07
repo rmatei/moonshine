@@ -320,12 +320,12 @@ end
 
 namespace :god do
   desc "Start god"
-  task :init, :roles => :app do
+  task :start, :roles => :app do
     sudo "god -c /etc/god.conf"
   end
   
   desc "Kill god"
-  task :kill, :roles => :app do
+  task :stop, :roles => :app do
     sudo "god terminate"
   end
   
@@ -334,8 +334,6 @@ namespace :god do
     sudo "god load /etc/god.conf"
   end
 end
-
-before "dj:restart", "god:reload"
 
 namespace :dj do
   desc "Stop delayed job processes through god"
@@ -348,13 +346,15 @@ namespace :dj do
     sudo "god start dj"
   end
   
-  desc "Restart delayed job processes through god"
+  desc "Restart delayed job processes with new code and God config"
   task :restart, :roles => :app do
-    sudo "god restart dj"
+    god.stop
+    dj.killall
+    god.start
   end
   
   task :killall, :roles => :app do
-    sudo "killall rake"
+    sudo "killall -9 rake"
   end
 end
 
