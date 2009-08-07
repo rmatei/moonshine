@@ -280,7 +280,7 @@ namespace :status do
   end
   
   desc "Number of enqueued jobs"
-  task :dj, :role => :primary_app do
+  task :dj, :roles => :primary_app do
     rake "dj:status"
   end
 end
