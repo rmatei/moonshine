@@ -279,9 +279,21 @@ namespace :status do
     sudo "god status dj"
   end
   
-  desc "Number of enqueued jobs"
-  task :dj, :roles => :primary_app do
-    rake "dj:status"
+  namespace :dj do
+    task :default do
+      status.dj.processes
+      status.dj.queue
+    end
+    
+    desc "Number of enqueued jobs"
+    task :queue, :roles => :primary_app do
+      rake "dj:status"
+    end
+    
+    desc "Show worker processes"
+    task :processes, :roles => :app do
+      run "ps aux | grep rake"
+    end
   end
 end
 
@@ -343,10 +355,6 @@ namespace :dj do
   
   task :killall, :roles => :app do
     sudo "killall rake"
-  end
-  
-  task :rake, :roles => :app do
-    run "ps aux | grep rake"
   end
 end
 
