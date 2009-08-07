@@ -278,6 +278,11 @@ namespace :status do
   task :god, :roles => :app do
     sudo "god status dj"
   end
+  
+  desc "Number of enqueued jobs"
+  task :dj, :role => :primary_app do
+    rake "dj:status"
+  end
 end
 
 task :tag_last_deploy do
