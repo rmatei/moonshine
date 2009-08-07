@@ -264,6 +264,11 @@ namespace :status do
     end
   end
   
+  desc "Show all running processes" 
+  task :processes, :roles => :app do
+    run "ps aux"
+  end
+  
   desc "Look at number of Passenger instances"
   task :passenger, :roles => :app do
     sudo "passenger-status"
@@ -292,7 +297,7 @@ namespace :status do
     
     desc "Show worker processes"
     task :processes, :roles => :app do
-      run "ps aux | grep rake"
+      run "ps aux | grep -v grep | grep -c 'rake jobs:work'"
     end
   end
 end
