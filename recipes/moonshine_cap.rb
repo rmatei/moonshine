@@ -256,6 +256,14 @@ namespace :status do
     end
   end
   
+  desc "Tail production log file, filtering warnings and errors" 
+  task :errors, :roles => :app do
+    run "tail -f #{shared_path}/log/production.log | grep '~~~'" do |channel, stream, data|
+      puts "#{data}" 
+      break if stream == :err    
+    end
+  end
+  
   desc "Look at memory stats" 
   task :vmstat, :roles => :app do
     run "vmstat 10" do |channel, stream, data|
