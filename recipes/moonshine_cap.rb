@@ -351,19 +351,21 @@ end
 namespace :dj do
   desc "Stop delayed job processes through god"
   task :stop, :roles => :app do
-    sudo "god stop dj"
+    # sudo "god stop dj"
+    god.stop
+    dj.killall
   end
   
   desc "Start delayed job processes through god"
   task :start, :roles  => :app do
-    sudo "god start dj"
+    # sudo "god start dj"
+    god.start
   end
   
   desc "Restart delayed job processes with new code and God config"
   task :restart, :roles => :app do
-    god.stop
-    dj.killall
-    god.start
+    dj.stop
+    dj.start
   end
   
   task :killall, :roles => :app do
