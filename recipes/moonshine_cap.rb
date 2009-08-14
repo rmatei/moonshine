@@ -296,16 +296,22 @@ namespace :status do
     task :default do
       status.dj.processes
       status.dj.queue
+      status.dj.errors
     end
     
     desc "Number of enqueued jobs"
     task :queue, :roles => :primary_app do
-      rake "dj:status"
+      rake "dj:status:queue"
     end
     
     desc "Show worker processes"
     task :processes, :roles => :app do
       run "ps aux | grep -v grep | grep -c 'rake jobs:work'"
+    end
+    
+    desc "Show most common errors"
+    task :errors, :roles => :primary_app do
+      rake "dj:status:errors"
     end
   end
 end
