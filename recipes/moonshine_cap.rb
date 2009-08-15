@@ -296,7 +296,6 @@ namespace :status do
     task :default do
       status.dj.processes
       status.dj.queue
-      status.dj.errors
     end
     
     desc "Number of enqueued jobs"
@@ -306,7 +305,7 @@ namespace :status do
     
     desc "Show worker processes"
     task :processes, :roles => :app do
-      run "ps aux | grep -v grep | grep -c 'rake jobs:work'"
+      run "ps aux | grep -v grep | grep -c 'rake jobs:work' || set $?=0"
     end
     
     desc "Show most common errors"
@@ -375,10 +374,10 @@ namespace :dj do
   end
   
   task :killall, :roles => :app do
-    sudo "killall -9 rake"
+    sudo "killall -9 rake || set $?=0"
   end
 end
 
-def rake command
-  run "cd #{current_path}; rake #{command} RAILS_ENV=production"
+def rake command, force_pass = false
+  run "cd #{current_path}; rake #{command} RAILS_ENV=production #{force_pass ? " || set $?=0" : ""}"
 end
