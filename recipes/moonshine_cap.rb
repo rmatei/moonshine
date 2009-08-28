@@ -353,7 +353,7 @@ namespace :dj do
   end
   
   task :killall, :roles => :app do
-    sudo "killall -9 rake || set $?=0"
+    sudo "ps axwww | grep 'rake jobs:work' | grep -v grep | awk '{print $2}'| xargs -n1 kill -9 || set $?=0"
   end
 end
 
