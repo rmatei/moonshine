@@ -323,7 +323,7 @@ namespace :god do
   
   desc "Kill god"
   task :stop, :roles => :app do
-    sudo "god terminate"
+    sudo "god terminate || set $?=0"
   end
   
   desc "Reload god config"
@@ -353,7 +353,7 @@ namespace :dj do
   end
   
   task :killall, :roles => :app do
-    sudo "ps axwww | grep 'rake jobs:work' | grep -v grep | awk '{print $2}'| xargs -n1 kill -9 || set $?=0"
+    run "sudo ps aux | grep 'rake jobs:work' | grep -v grep | awk '{print $2}' | xargs -n1 kill || set $?=0"
   end
 end
 
