@@ -24,3 +24,5 @@ postgres:
 - postgresql-client
 - postgresql-contrib
 - libpq-dev
+kissmetrics:
+- curl

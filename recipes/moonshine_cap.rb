@@ -59,7 +59,11 @@ namespace :moonshine do
     sudo '/tmp/ree_upgrade.sh'
     sudo 'rm /tmp/ree_upgrade.sh'
   end
-  
+
+  desc "apt-get update"
+  task :update_apt_get do
+    sudo 'apt-get update'
+  end
 
   desc 'Apply the Moonshine manifest for this application'
   task :apply do

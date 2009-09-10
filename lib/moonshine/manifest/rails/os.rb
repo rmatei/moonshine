@@ -85,6 +85,10 @@ from installing any gems, packages, or dependencies directly on the server.
   def libxml_dev
     package 'libxml2-dev', :ensure => :latest
   end
+  
+  def curl
+    package 'curl', :ensure => :latest
+  end
 
 private
 
