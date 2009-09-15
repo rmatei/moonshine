@@ -307,16 +307,9 @@ task :tag_last_deploy do
   puts "Tagged release with #{tag_name}."
 end
 
+desc "Reboot app servers"
 task :reboot do
-  desc "Reboot app servers"
   sudo "reboot"
-end
-
-namespace :db do
-  desc "Creates a gzipped copy of the production database."
-  task :backup, :roles => :primary_app do
-    rake "db:backup DIR=#{shared_path} -f #{current_path}/config/shared/tasks/backup.rake"
-  end
 end
 
 namespace :god do
