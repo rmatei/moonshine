@@ -248,7 +248,7 @@ end
 
 after "deploy:update_code", "tag_last_deploy"
 after "deploy:update_code", "newrelic:notice_deployment"
-# after "deploy:restart", "dj:restart"
+after "deploy:restart", "dj:restart"
 #after "deploy", "deploy:restart"
 
 namespace :status do
@@ -315,7 +315,7 @@ end
 namespace :god do
   desc "Start god"
   task :start, :roles => :app do
-    sudo "god -c /etc/god.conf"
+    sudo "god -c /etc/god.conf || set $?=0"
   end
   
   desc "Kill god"
