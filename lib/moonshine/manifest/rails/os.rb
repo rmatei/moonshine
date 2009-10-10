@@ -100,12 +100,12 @@ private
   #    :postrotate => 'touch /srv/theapp/current/tmp/restart.txt'
   #  })
   #
-  def logrotate(log_or_glob, options = {})
+  def logrotate(log_or_glob, options = {}, name = nil)
     options = options.respond_to?(:to_hash) ? options.to_hash : {}
 
     package "logrotate", :ensure => :installed, :require => package("cron"), :notify => service("cron")
 
-    safename = log_or_glob.gsub(/[^a-zA-Z]/, '')
+    safename = name || log_or_glob.gsub(/[^a-zA-Z]/, '')
 
     file "/etc/logrotate.d/#{safename}.conf",
       :ensure => :present,

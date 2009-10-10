@@ -50,7 +50,7 @@ module Moonshine::Manifest::Rails::Rails
     logrotate("#{configuration[:deploy_to]}/shared/log/[!km]*.log", {
       :options => %w(missingok compress delaycompress sharedscripts),
       :postrotate => "touch #{configuration[:deploy_to]}/current/tmp/restart.txt"
-    })
+    }, "rails")
     #file "/etc/logrotate.d/#{configuration[:deploy_to].gsub('/','')}sharedlog.conf", :ensure => :absent
   end
 
