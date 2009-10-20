@@ -40,9 +40,10 @@ fi
 echo "Installing Rake"
 gem install rake --no-rdoc --no-ri
 
+gem install puppet --version 0.24.8
+
 echo "Installing Shadow Puppet"
 gem install shadow_puppet --no-rdoc --no-ri
 
-gem uninstall puppet -i
-gem install puppet --version 0.24.8
+
 
