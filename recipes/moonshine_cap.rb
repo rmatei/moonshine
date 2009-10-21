@@ -354,6 +354,13 @@ namespace :dj do
   end
 end
 
+namespace :cook_magic do
+  desc "Load fixtures on production"
+  task :seed_data, :roles => :app do
+    run "cd #{current_path}; rake db:cook_magic:seed RAILS_ENV=production"
+  end
+end
+
 def rake command, force_pass = false
   run "cd #{current_path}; rake #{command} RAILS_ENV=production #{force_pass ? " || set $?=0" : ""}"
 end
