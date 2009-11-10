@@ -52,7 +52,7 @@ class Moonshine::Manifest::Rails < Moonshine::Manifest
   # Basics that are used on all server roles
   def shared_stack
     self.class.recipe :rails_rake_environment, :rails_gems, :rails_directories
-    self.class.recipe :ntp, :time_zone, :postfix, :cron_packages, :motd, :psmisc
+    self.class.recipe :ntp, :time_zone, :postfix, :cron_packages, :munin, :motd, :psmisc
   end
 
   # A super recipe for installing Apache, Passenger, a database, 

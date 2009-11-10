@@ -27,6 +27,18 @@ module Moonshine::Manifest::Rails::Os
         :require => package("cron")
     end
   end
+  
+  # Server monitoring
+  def munin
+    package "munin-node", :ensure => :installed
+    package "munin", :ensure => :installed
+    service "munin-node", :require => package("munin-node"), :ensure => :running
+    
+    file "/etc/apache2/sites-enabled/munin",
+      :ensure => :present,
+      :content => template(File.join(File.dirname(__FILE__), 'templates', 'munin.vhost.erb')),
+      :notify => service("apache2")
+  end
 
   # Create a MOTD to remind those logging in via SSH that things are managed
   # with Moonshine
