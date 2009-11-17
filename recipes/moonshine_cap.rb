@@ -352,6 +352,10 @@ namespace :dj do
   task :killall, :roles => :app do
     run "sudo ps aux | grep 'rake jobs:work' | grep -v grep | awk '{print $2}' | xargs -n1 kill || set $?=0"
   end
+
+  task :forcekill, :roles => :app do
+    run "sudo ps aux | grep 'rake jobs:work' | grep -v grep | awk '{print $2}' | xargs -n1 kill -9 || set $?=0"
+  end
 end
 
 namespace :cook_magic do
